@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运动管家</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal">
+        <div class="modal-content">
+            <h2>用户登录</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                </div>
+                <button type="submit" class="login-btn">登录</button>
+                <div id="error-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 运动管家内容 -->
+    <div id="dashboard">
+        <!-- 导航栏 -->
+        <header>
+            <h1>运动管家</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" id="go-to-activity">运动信息</a></li>
+                    <li><a href="#" id="go-to-forum">社区论坛</a></li>
+                    <li><a href="#" id="logout">退出</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 运动信息页面 -->
+        <section id="activity-info">
+            <h2>运动信息</h2>
+            <div class="goal-progress">
+                <p>步数目标：<span id="step-goal">10000</span> 步</p>
+                <progress id="step-progress" value="0" max="10000"></progress>
+            </div>
+            <h3>实时运动数据</h3>
+            <p>消耗卡路里：<span id="calories-burned">0</span> kcal</p>
+            <p>当前心率：<span id="heart-rate">-- bpm</span></p>
+        </section>
+
+        <!-- 社区论坛页面 -->
+        <section id="community-forum">
+            <h2>社区论坛</h2>
+            <ul id="post-list">
+                <li><a href="#">帖子标题 1</a></li>
+                <li><a href="#">帖子标题 2</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <script src="login.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
