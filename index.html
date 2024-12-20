@@ -4,66 +4,278 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>运动管家</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 引入 Chart.js -->
+    <style>
+        /* 基本样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        /* 布局样式 */
+        #dashboard {
+            display: flex;
+            height: 100vh;
+        }
+        #sidebar {
+            background-color: #34495e;
+            color: #ecf0f1;
+            width: 250px;
+            padding: 20px;
+        }
+        #sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #sidebar ul li {
+            margin: 10px 0;
+        }
+        #sidebar ul li a {
+            color: #ecf0f1;
+            padding: 10px;
+            display: block;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background-color: #1abc9c;
+        }
+        #main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .section-content {
+            display: none; /* 默认隐藏所有页面内容 */
+        }
+        .section-content.active {
+            display: block; /* 显示当前活动页面内容 */
+        }
+        .card {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            max-width: 800px;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .info-table th, .info-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .info-table th {
+            background-color: #f5f5f5;
+        }
+        .plan-btn {
+            background-color: #1abc9c;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .plan-btn:hover {
+            background-color: #16a085;
+        }
+        .plan-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
+    <div id="dashboard">
+        <!-- 侧边栏 -->
+        <aside id="sidebar">
+            <h2>运动管家</h2>
+            <ul>
+                <li><a href="#" data-target="activity-info" class="active">运动信息</a></li>
+                <li><a href="#" data-target="health-info">身体健康信息</a></li>
+                <li><a href="#" data-target="ai-plan">AI运动计划</a></li>
+                <li><a href="#" id="logout" style="background-color: #e74c3c; color: #fff;">退出登录</a></li>
+            </ul>
+        </aside>
 
-    <!-- 登录模态框 -->
-    <div id="login-modal">
-        <div class="modal-content">
-            <h2>用户登录</h2>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">用户名</label>
-                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+        <!-- 主内容区 -->
+        <div id="main-content">
+            <!-- 运动信息页面 -->
+            <section id="activity-info" class="section-content active">
+                <div class="card">
+                    <h3>步数记录</h3>
+                    <div class="chart-container">
+                        <canvas id="stepChart"></canvas>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">密码</label>
-                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                <div class="card">
+                    <h3>卡路里消耗记录</h3>
+                    <div class="chart-container">
+                        <canvas id="calorieChart"></canvas>
+                    </div>
                 </div>
-                <button type="submit" class="login-btn">登录</button>
-                <div id="error-message" class="error-message"></div>
-            </form>
+            </section>
+
+            <!-- 身体健康信息页面 -->
+            <section id="health-info" class="section-content">
+                <div class="card">
+                    <h3>身体健康信息</h3>
+                    <table class="info-table">
+                        <tr>
+                            <th>指标</th>
+                            <th>值</th>
+                        </tr>
+                        <tr>
+                            <td>身高</td>
+                            <td>170 cm</td>
+                        </tr>
+                        <tr>
+                            <td>体重</td>
+                            <td>65 kg</td>
+                        </tr>
+                        <tr>
+                            <td>心率</td>
+                            <td>75 bpm</td>
+                        </tr>
+                        <tr>
+                            <td>血糖</td>
+                            <td>5.5 mmol/L</td>
+                        </tr>
+                        <tr>
+                            <td>血压</td>
+                            <td>120/80 mmHg</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- AI运动计划页面 -->
+            <section id="ai-plan" class="section-content">
+                <div class="card">
+                    <h3>AI运动计划生成器</h3>
+                    <button class="plan-btn" id="generate-plan">生成运动计划</button>
+                    <div class="plan-result" id="plan-result">
+                        点击上方按钮生成您的每日运动计划。
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <!-- 运动管家内容 -->
-    <div id="dashboard">
-        <!-- 导航栏 -->
-        <header>
-            <h1>运动管家</h1>
-            <nav>
-                <ul>
-                    <li><a href="#" id="go-to-activity">运动信息</a></li>
-                    <li><a href="#" id="go-to-forum">社区论坛</a></li>
-                    <li><a href="#" id="logout">退出</a></li>
-                </ul>
-            </nav>
-        </header>
+    <script>
+        // 侧边栏导航逻辑
+        const links = document.querySelectorAll('#sidebar a[data-target]');
+        const sections = document.querySelectorAll('.section-content');
 
-        <!-- 运动信息页面 -->
-        <section id="activity-info">
-            <h2>运动信息</h2>
-            <div class="goal-progress">
-                <p>步数目标：<span id="step-goal">10000</span> 步</p>
-                <progress id="step-progress" value="0" max="10000"></progress>
-            </div>
-            <h3>实时运动数据</h3>
-            <p>消耗卡路里：<span id="calories-burned">0</span> kcal</p>
-            <p>当前心率：<span id="heart-rate">-- bpm</span></p>
-        </section>
+        links.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
 
-        <!-- 社区论坛页面 -->
-        <section id="community-forum">
-            <h2>社区论坛</h2>
-            <ul id="post-list">
-                <li><a href="#">帖子标题 1</a></li>
-                <li><a href="#">帖子标题 2</a></li>
-            </ul>
-        </section>
-    </div>
+                // 移除所有链接的活动状态
+                links.forEach(l => l.classList.remove('active'));
 
-    <script src="login.js"></script>
-    <script src="script.js"></script>
+                // 隐藏所有页面内容
+                sections.forEach(section => section.classList.remove('active'));
+
+                // 激活当前链接和对应页面内容
+                this.classList.add('active');
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // 模拟数据
+        const stepData = [5000, 7000, 8000, 6000, 9000, 7500, 8200]; // 最近一周步数
+        const calorieData = [200, 300, 250, 270, 350, 310, 290]; // 最近一周卡路里消耗
+
+        // 渲染步数柱状图
+        const stepCtx = document.getElementById('stepChart').getContext('2d');
+        new Chart(stepCtx, {
+            type: 'bar',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [{
+                    label: '步数',
+                    data: stepData,
+                    backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 渲染卡路里柱状图
+        const calorieCtx = document.getElementById('calorieChart').getContext('2d');
+        new Chart(calorieCtx, {
+            type: 'bar',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [{
+                    label: '卡路里 (kcal)',
+                    data: calorieData,
+                    backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // AI生成运动计划逻辑
+        const generatePlanBtn = document.getElementById('generate-plan');
+        const planResultDiv = document.getElementById('plan-result');
+
+        generatePlanBtn.addEventListener('click', function() {
+            const plan = `
+                1. 步行 ${Math.floor(Math.random() * 5) + 5} 公里。
+                2. 跳绳 ${Math.floor(Math.random() * 15) + 15} 分钟。
+                3. 跑步 ${Math.floor(Math.random() * 3) + 2} 公里。
+                4. 做 ${Math.floor(Math.random() * 20) + 10} 个俯卧撑。
+            `;
+            planResultDiv.textContent = plan;
+        });
+    </script>
 </body>
 </html>
