@@ -24,10 +24,51 @@
             padding: 0;
         }
 
+        /* 登录模态框样式 */
+        #login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #login-modal .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        #login-modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #login-modal button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1abc9c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #login-modal button:hover {
+            background-color: #16a085;
+        }
+
         /* 布局样式 */
         #dashboard {
             display: flex;
             height: 100vh;
+            display: none;
         }
         #sidebar {
             background-color: #34495e;
@@ -113,6 +154,17 @@
     </style>
 </head>
 <body>
+    <!-- 登录模态框 -->
+    <div id="login-modal">
+        <div class="login-form">
+            <h3>登录</h3>
+            <input type="text" id="login-username" placeholder="用户名" />
+            <input type="password" id="login-password" placeholder="密码" />
+            <button id="login-btn">登录</button>
+        </div>
+    </div>
+
+    <!-- 运动管家仪表盘 -->
     <div id="dashboard">
         <!-- 侧边栏 -->
         <aside id="sidebar">
@@ -121,6 +173,7 @@
                 <li><a href="#" data-target="activity-info" class="active">运动信息</a></li>
                 <li><a href="#" data-target="health-info">身体健康信息</a></li>
                 <li><a href="#" data-target="ai-plan">AI运动计划</a></li>
+                <li><a href="#" data-target="forum">社区论坛</a></li> <!-- 新增社区论坛选项 -->
                 <li><a href="#" id="logout" style="background-color: #e74c3c; color: #fff;">退出登录</a></li>
             </ul>
         </aside>
@@ -214,10 +267,157 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 社区论坛页面 -->
+            <section id="forum" class="section-content">
+                <div class="card forum-card">
+                    <h3>社区论坛</h3>
+                    <div class="forum-posting">
+                        <textarea id="new-post-content" class="comment-input" placeholder="发布您的帖子..."></textarea>
+                        <button class="comment-btn" id="post-btn">发布帖子</button>
+                    </div>
+
+                    <!-- 显示帖子列表 -->
+                    <div class="forum-posts" id="forum-posts">
+                        <!-- 帖子会动态生成在这里 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CSS样式 -->
+            <style>
+                /* 更新论坛部分的布局 */
+                #forum {
+                    width: 80%; /* 调整为较宽的宽度 */
+                    margin: 20px auto;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .forum-card {
+                    padding: 30px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .forum-card h3 {
+                    font-size: 24px;
+                    color: #333;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+
+                /* 发布帖子输入框和按钮 */
+                .forum-posting {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .comment-input {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                    resize: vertical;
+                    min-height: 120px;
+                    font-family: Arial, sans-serif;
+                    transition: border 0.3s;
+                }
+
+                .comment-input:focus {
+                    border-color: #3498db; /* 输入框获得焦点时的边框颜色 */
+                }
+
+                .comment-btn {
+                    align-self: flex-start;
+                    padding: 10px 20px;
+                    background-color: #3498db;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+
+                .comment-btn:hover {
+                    background-color: #2980b9; /* 按钮悬停时颜色变化 */
+                }
+
+                .forum-posts {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .forum-post {
+                    background-color: #fff;
+                    padding: 15px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s;
+                }
+
+                .forum-post:hover {
+                    transform: scale(1.02); /* 鼠标悬停时轻微放大效果 */
+                }
+
+                .forum-post h4 {
+                    font-size: 18px;
+                    color: #2c3e50;
+                    margin-bottom: 10px;
+                }
+
+                .forum-post p {
+                    font-size: 16px;
+                    color: #7f8c8d;
+                    line-height: 1.6;
+                }
+
+                .forum-post .comment-input {
+                    margin-top: 10px;
+                    font-size: 14px;
+                    padding: 8px;
+                }
+
+                .forum-post .comment-btn {
+                    margin-top: 10px;
+                    font-size: 14px;
+                }
+
+                /* 响应式设计 */
+                @media (max-width: 768px) {
+                    #forum {
+                        width: 95%;
+                    }
+
+                    .forum-card {
+                        padding: 20px;
+                    }
+
+                    .forum-posting textarea {
+                        min-height: 80px;
+                    }
+                }
+            </style>
         </div>
     </div>
 
     <script>
+        // 登录界面显示和隐藏
+        const loginModal = document.getElementById('login-modal');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout');
+        let loggedIn = false;
+
         // 侧边栏导航逻辑
         const links = document.querySelectorAll('#sidebar a[data-target]');
         const sections = document.querySelectorAll('.section-content');
@@ -291,7 +491,34 @@
             }
         });
 
-        // AI运动计划逻辑
+        // 登录按钮逻辑
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (username === 'admin' && password === '1234') {
+                loggedIn = true;
+                loginModal.style.display = 'none'; // 隐藏登录模态框
+                dashboard.style.display = 'flex'; // 显示仪表盘
+            } else {
+                alert('用户名或密码错误！');
+            }
+        });
+
+        // 退出登录按钮逻辑
+        logoutBtn.addEventListener('click', function() {
+            loggedIn = false;
+            loginModal.style.display = 'flex'; // 显示登录模态框
+            dashboard.style.display = 'none'; // 隐藏仪表盘
+        });
+
+        // 初次加载时检查登录状态
+        if (!loggedIn) {
+            loginModal.style.display = 'flex';
+            dashboard.style.display = 'none';
+        }
+
+        // AI运动计划生成逻辑
         const motivationalQuotes = [
             "坚持下去，胜利就在眼前！",
             "今天的汗水是明天的骄傲。",
@@ -321,9 +548,52 @@
             `;
         };
 
+        // 绑定按钮事件
         document.getElementById('generate-plan').addEventListener('click', () => {
             document.getElementById('plan-result').innerHTML = generatePlan();
         });
+
+        // 论坛功能：硬编码模拟的帖子
+        const forumPosts = document.getElementById('forum-posts');
+
+        // 硬编码的一些示例帖子
+        const examplePosts = [
+            { username: 'admin', content: '今天我刚刚跑完了5公里，感觉非常棒！' },
+            { username: 'user1', content: '我最近在尝试新的饮食计划，效果不错！' },
+            { username: 'user2', content: '早晨跑步真的能带来一天的好心情，大家试试吧！' },
+        ];
+
+        // 显示模拟的帖子
+        const loadPosts = () => {
+        forumPosts.innerHTML = examplePosts.map(post => `
+            <div class="forum-post">
+                <h4>${post.username}</h4>
+                <p>${post.content}</p>
+                <div>
+                    <textarea class="comment-input" placeholder="添加评论..."></textarea>
+                    <button class="comment-btn">评论</button>
+                </div>
+            </div>
+        `).join('');
+        };
+
+        // 发布帖子模拟
+        const postBtn = document.getElementById('post-btn');
+        const newPostContent = document.getElementById('new-post-content');
+
+        postBtn.addEventListener('click', () => {
+            const postContent = newPostContent.value.trim();
+            if (postContent) {
+                // 直接模拟新增一个帖子到页面中
+                examplePosts.push({ username: 'admin', content: postContent });
+                newPostContent.value = ''; // 清空输入框
+                loadPosts(); // 刷新帖子列表
+            }
+        });
+
+        // 初次加载时显示帖子
+        loadPosts();
     </script>
+
 </body>
 </html>
