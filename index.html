@@ -143,7 +143,6 @@
                 </div>
             </section>
 
-            
             <!-- 身体健康信息页面 -->
             <section id="health-info" class="section-content">
                 <div class="card">
@@ -173,7 +172,6 @@
                             <td>血压</td>
                             <td>120/80 mmHg</td>
                         </tr>
-                        <!-- 新增健康信息 -->
                         <tr>
                             <td>BMI</td>
                             <td>22.5</td>
@@ -205,13 +203,17 @@
                     </table>
                 </div>
             </section>
-            
 
             <!-- AI运动计划页面 -->
             <section id="ai-plan" class="section-content">
-            
-            
-            
+                <div class="card">
+                    <h3>AI每日运动计划</h3>
+                    <button class="plan-btn" id="generate-plan">生成运动计划</button>
+                    <div class="plan-result" id="plan-result">
+                        点击上方按钮生成您的每日运动计划。
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -289,18 +291,38 @@
             }
         });
 
-        // AI生成运动计划逻辑
-        const generatePlanBtn = document.getElementById('generate-plan');
-        const planResultDiv = document.getElementById('plan-result');
+        // AI运动计划逻辑
+        const motivationalQuotes = [
+            "坚持下去，胜利就在眼前！",
+            "今天的汗水是明天的骄傲。",
+            "每一步都算数，只要不停步。",
+            "你的身体会感谢你今天的努力！",
+            "健康是一生的财富，行动是成功的钥匙。",
+        ];
 
-        generatePlanBtn.addEventListener('click', function() {
-            const plan = `
-                1. 步行 ${Math.floor(Math.random() * 5) + 5} 公里。
-                2. 跳绳 ${Math.floor(Math.random() * 15) + 15} 分钟。
-                3. 跑步 ${Math.floor(Math.random() * 3) + 2} 公里。
-                4. 做 ${Math.floor(Math.random() * 20) + 10} 个俯卧撑。
+        const generatePlan = () => {
+            const morningCalories = Math.floor(Math.random() * 200) + 200;
+            const morningFat = (morningCalories / 9).toFixed(1);
+            const afternoonCalories = Math.floor(Math.random() * 300) + 300;
+            const afternoonFat = (afternoonCalories / 9).toFixed(1);
+            const eveningCalories = Math.floor(Math.random() * 150) + 150;
+            const eveningFat = (eveningCalories / 9).toFixed(1);
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+
+            return `
+                <h4>早上计划：</h4>
+                <p>步行 3 公里（预计消耗 ${morningCalories} 千卡，燃烧 ${morningFat} 克脂肪）</p>
+                <h4>下午计划：</h4>
+                <p>跑步 5 公里（预计消耗 ${afternoonCalories} 千卡，燃烧 ${afternoonFat} 克脂肪）</p>
+                <h4>晚上计划：</h4>
+                <p>跳绳 20 分钟（预计消耗 ${eveningCalories} 千卡，燃烧 ${eveningFat} 克脂肪）</p>
+                <h4>励志语句：</h4>
+                <p>${randomQuote}</p>
             `;
-            planResultDiv.textContent = plan;
+        };
+
+        document.getElementById('generate-plan').addEventListener('click', () => {
+            document.getElementById('plan-result').innerHTML = generatePlan();
         });
     </script>
 </body>
